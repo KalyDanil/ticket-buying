@@ -90,7 +90,7 @@ function App() {
         const hours = ( (getOneWayTripMilliseconds(chosenTimeFromB) - new Date(chosenTimeFromA).getTime())/ 60000 )/ 60;
         setDepartureTime(chosenTimeFromA);
         setArrivalTime(new Date(getOneWayTripMilliseconds(chosenTimeFromB)).toString());
-        setTravelTime(`${Math.floor(hours)} часов ${Math.round(60 * (hours - Math.floor(hours)))} минут`)
+        setTravelTime(`${Math.floor(hours)} часа ${Math.round(60 * (hours - Math.floor(hours)))} минут`)
         setSum(ticketsNumber * 1200);
         break;
       default:
@@ -111,39 +111,37 @@ function App() {
         <MenuItem value="из B в A">из B в A</MenuItem>
         <MenuItem value="из A в B и обратно в А">из A в B и обратно в А</MenuItem>
       </TextField >
-      {chosenPath === 'из A в B' 
-      && <TimeSelect label="Время отправления из А в В" timeFromTo={timeFromAtoB} selectTimeFrom={(e) => selectTimeFromA(e)}/>
-      }
-      {chosenPath === 'из B в A'
-      && <TimeSelect label="Время отправления из В в А" timeFromTo={timeFromBtoA} selectTimeFrom={(e) => selectTimeFromB(e)}/>
-      }
-      {chosenPath === 'из A в B и обратно в А'
-      && 
-      <>
+      {chosenPath === 'из A в B' && (
         <TimeSelect label="Время отправления из А в В" timeFromTo={timeFromAtoB} selectTimeFrom={(e) => selectTimeFromA(e)}/>
-        <TimeSelect 
-          label="Время отправления из В в А" 
-          timeFromTo={timeFromBtoA} 
-          selectTimeFrom={(e) => selectTimeFromB(e)}
-          isSpecial={true}
-          chosenTimeFromA={chosenTimeFromA}
-        />
-      </>
-      }
-      {timeIsChosen 
-      &&  <form className="sumСalculation" onSubmit={(e) => getResult(e)}>
-            <TextField label="Количество билетов" onInput={(e) => inputTicketsNumber(e)} value={ticketsNumber}/>
-            <Input className="sumСalculation__inputSubmit" type="submit" variant="contained"  value="Посчитать" />
-          </form>
-      }
-      {sum !== 0
-       && <p>
-          Вы выбрали {ticketsNumber} билета по маршруту {chosenPath}, сумма покупки {sum} р.
-          Это путешествие займет у вас {travelTime}. 
-          Теплоход отправляется в {departureTime}, а прибудет в пункт назначения в {arrivalTime}.
-          </p>
-      }
-      
+      )}
+      {chosenPath === 'из B в A' && (
+        <TimeSelect label="Время отправления из В в А" timeFromTo={timeFromBtoA} selectTimeFrom={(e) => selectTimeFromB(e)}/>
+      )}
+      {chosenPath === 'из A в B и обратно в А' && (
+        <>
+          <TimeSelect label="Время отправления из А в В" timeFromTo={timeFromAtoB} selectTimeFrom={(e) => selectTimeFromA(e)}/>
+          <TimeSelect 
+            label="Время отправления из В в А" 
+            timeFromTo={timeFromBtoA} 
+            selectTimeFrom={(e) => selectTimeFromB(e)}
+            isSpecial={true}
+            chosenTimeFromA={chosenTimeFromA}
+          />
+        </>
+      )}
+      {timeIsChosen && (
+        <form className="sumСalculation" onSubmit={(e) => getResult(e)}>
+          <TextField label="Количество билетов" onInput={(e) => inputTicketsNumber(e)} value={ticketsNumber}/>
+          <Input className="sumСalculation__inputSubmit" type="submit" variant="contained"  value="Посчитать" />
+        </form>
+      )}
+      {sum !== 0 && (
+        <p>
+        Вы выбрали {ticketsNumber} билета по маршруту {chosenPath}, сумма покупки {sum} р.
+        Это путешествие займет у вас {travelTime}. 
+        Теплоход отправляется в {departureTime}, а прибудет в пункт назначения в {arrivalTime}.
+        </p>
+      )}
     </Appstyle>
   );
 }
